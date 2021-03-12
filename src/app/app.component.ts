@@ -25,9 +25,12 @@ export class AppComponent implements OnInit {
         userTitle: "Users 2",
         date: new Date().toLocaleDateString(),
         tenantName: "Test Tenant",
-        site: "Test Site 1",
-        location: "Test Location",
       },
+      summary:[
+        { title: "Week Commencing", value: "08/03/21" },
+        { title: "Site", value: "Test Site 1" },
+        { title: "Location", value: "Test Location" },
+      ],
       dataSet1: [
         { name: "Frank Smith", company: "ABC1 Ltd", age: 31 },
         { name: "Frank Smith", company: "ABC1 Ltd", age: 32 },
@@ -61,6 +64,16 @@ export class AppComponent implements OnInit {
         columns: [
           { text: "hello {0}", variables: ["tenantName"] },
           { text: "", className:"logo" }
+        ]
+      },
+      {
+        title: { text: "Summary", height:1, className:"tableTitle"  },
+        className: "reportSummary",
+        rowHeight: 0.8,
+        dataSet: "summary",
+        columns: [
+          { dataSetKey: "title", className:"summaryTitle" },
+          { dataSetKey: "value" }
         ]
       },
       {
