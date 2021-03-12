@@ -31,7 +31,36 @@ export class AppComponent implements OnInit {
         { name: "Frank3", company: "ABC3 Ltd", age: 33 },
         { name: "Frank4", company: "ABC4 Ltd", age: 34 },
 
-        
+        { name: "Frank2 Smith", groupMarker: true, className: "GroupHeader" },
+        { name: "Frank1", company: "ABC1 Ltd", age: 31 },
+        { name: "Frank2", company: "ABC2 Ltd", age: 32 },
+        { name: "Frank3", company: "ABC3 Ltd", age: 33 },
+        { name: "Frank4", company: "ABC4 Ltd", age: 34 },
+
+        { name: "Frank2 Smith", groupMarker: true, className: "GroupHeader" },
+        { name: "Frank1", company: "ABC1 Ltd", age: 31 },
+        { name: "Frank2", company: "ABC2 Ltd", age: 32 },
+        { name: "Frank3", company: "ABC3 Ltd", age: 33 },
+        { name: "Frank4", company: "ABC4 Ltd", age: 34 },
+
+        { name: "Frank2 Smith", groupMarker: true, className: "GroupHeader" },
+        { name: "Frank1", company: "ABC1 Ltd", age: 31 },
+        { name: "Frank2", company: "ABC2 Ltd", age: 32 },
+        { name: "Frank3", company: "ABC3 Ltd", age: 33 },
+        { name: "Frank4", company: "ABC4 Ltd", age: 34 },
+
+        { name: "Frank2 Smith", groupMarker: true, className: "GroupHeader" },
+        { name: "Frank1", company: "ABC1 Ltd", age: 31 },
+        { name: "Frank2", company: "ABC2 Ltd", age: 32 },
+        { name: "Frank3", company: "ABC3 Ltd", age: 33 },
+        { name: "Frank4", company: "ABC4 Ltd", age: 34 },
+
+        { name: "Frank2 Smith", groupMarker: true, className: "GroupHeader" },
+        { name: "Frank1", company: "ABC1 Ltd", age: 31 },
+        { name: "Frank2", company: "ABC2 Ltd", age: 32 },
+        { name: "Frank3", company: "ABC3 Ltd", age: 33 },
+        { name: "Frank4", company: "ABC4 Ltd", age: 34 },
+
         { name: "Frank2 Smith", groupMarker: true, className: "GroupHeader" },
         { name: "Frank1", company: "ABC1 Ltd", age: 31 },
         { name: "Frank2", company: "ABC2 Ltd", age: 32 },
@@ -119,9 +148,10 @@ export class AppComponent implements OnInit {
           if (rowsLeft) {
             currentPage.push(currentTable);
             if (report.pageFooter) currentPage.push(report.pageFooter);
-            pagedReport.push(currentPage);
+            pagedReport.push(JSON.parse(JSON.stringify(currentPage)));
 
             if (report.pageHeader) currentPage = [report.pageHeader];
+            else currentPage = [];
             currentPageHeightRemaining = maxPageHeight;
           }
         }
