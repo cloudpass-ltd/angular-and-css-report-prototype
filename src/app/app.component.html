@@ -26,7 +26,7 @@
 
   .pageFooter {
     position: absolute;
-    bottom: .25cm;
+    bottom: 0px;
     background-color: #0191c8;
     color: white;
   }
@@ -47,23 +47,30 @@
   }
 </style>
 
-<page size="A4" *ngFor="let page of pagedReport">
-  <table cellspacing="0" [class]="table.className" *ngFor="let table of page">
-    <tr *ngIf="table.head" [style.height]="table.rowHeight + 'cm'">
-      <th *ngFor="let cell of table.head">
-        {{cell}}
-      </th>
-    </tr>
+<span *ngIf="pagedReport">
 
-    <tr></tr>
-    <tr *ngFor="let row of table.rows" [style.height]="table.rowHeight + 'cm'">
-      <td
-        [class]="cell.className"
-        colspan="{{row.colspan}}"
-        *ngFor="let cell of row"
-      >
-        {{cell.text}}
-      </td>
-    </tr>
-  </table>
-</page>
+  <page size="A4" *ngFor="let page of pagedReport">
+    <div style="position: relative; height:100%;">
+      <table cellspacing="0" [class]="table.className" *ngFor="let table of page">
+        <tr *ngIf="table.head" [style.height]="table.rowHeight + 'cm'">
+          <th *ngFor="let cell of table.head">
+            {{cell}}
+          </th>
+        </tr>
+  
+        <tr></tr>
+        <tr *ngFor="let row of table.rows" [style.height]="table.rowHeight + 'cm'">
+          <td
+            [class]="cell.className"
+            colspan="{{row.colspan}}"
+            *ngFor="let cell of row"
+          >
+            {{cell.text}}
+          </td>
+        </tr>
+      </table>
+    </div>
+  </page>
+
+
+</span>
