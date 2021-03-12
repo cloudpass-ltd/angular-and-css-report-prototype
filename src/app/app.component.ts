@@ -46,6 +46,21 @@ export class AppComponent implements OnInit {
         { name: "Frank 3 Smith", company: "ABC2 Ltd", age: 32 },
         { name: "Frank 3 Smith", company: "ABC2 Ltd", age: 33 },
         { name: "Frank 3 Smith", company: "ABC2 Ltd", age: 34 },
+
+        { name: "Frank 3 Smith", company: "ABC2 Ltd", age: 31 },
+        { name: "Frank 3 Smith", company: "ABC2 Ltd", age: 32 },
+        { name: "Frank 3 Smith", company: "ABC2 Ltd", age: 33 },
+        { name: "Frank 3 Smith", company: "ABC2 Ltd", age: 34 },
+
+        { name: "Frank 3 Smith", company: "ABC2 Ltd", age: 31 },
+        { name: "Frank 3 Smith", company: "ABC2 Ltd", age: 32 },
+        { name: "Frank 3 Smith", company: "ABC2 Ltd", age: 33 },
+        { name: "Frank 3 Smith", company: "ABC2 Ltd", age: 34 },
+
+        { name: "Frank 3 Smith", company: "ABC2 Ltd", age: 31 },
+        { name: "Frank 3 Smith", company: "ABC2 Ltd", age: 32 },
+        { name: "Frank 3 Smith", company: "ABC2 Ltd", age: 33 },
+        { name: "Frank 3 Smith", company: "ABC2 Ltd", age: 34 },
       ]
     };
 
@@ -152,7 +167,7 @@ export class AppComponent implements OnInit {
           loopCount++;
           if (loopCount > 100) break;
 
-          currentTable = section;
+          currentTable = JSON.parse(JSON.stringify(section));
           if (section.title) {
             currentTable.title.text = this.bindDataIntoCellText(currentTable.title.text, currentTable.title.variables);
             currentPageHeightRemaining -= section.title.height;
@@ -172,8 +187,9 @@ export class AppComponent implements OnInit {
           rowsLeft -= currentTable.rows.length;
           rowsUsed += currentTable.rows.length;
 
-          currentPage.push(JSON.parse(JSON.stringify(currentTable)));
+          currentPage.push(currentTable);
           if (rowsLeft) {
+            console.log("NEW PAGE", rowsLeft, rowsUsed, currentTable.rows.length);
             if (report.pageFooter) currentPage.push(report.pageFooter);
             pagedReport.push(JSON.parse(JSON.stringify(currentPage)));
 
