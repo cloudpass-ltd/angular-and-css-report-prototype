@@ -23,59 +23,45 @@ export class AppComponent implements OnInit {
       variables: {
         title: "Test Report",
         userTitle: "Users 2",
-        date: new Date().toLocaleDateString()
+        date: new Date().toLocaleDateString(),
+        tenantName: "Test Tenant",
+        site: "Test Site 1",
+        location: "Test Location",
       },
       dataSet1: [
-        { name: "Frank1 Smith", groupMarker: true, className: "GroupHeader" },
-        { name: "Frank1", company: "ABC1 Ltd", age: 31 },
-        { name: "Frank2", company: "ABC2 Ltd", age: 32 },
-        { name: "Frank3", company: "ABC3 Ltd", age: 33 },
-        { name: "Frank4", company: "ABC4 Ltd", age: 34 },
+        { name: "Frank Smith", company: "ABC1 Ltd", age: 31 },
+        { name: "Frank Smith", company: "ABC1 Ltd", age: 32 },
+        { name: "Frank Smith", company: "ABC1 Ltd", age: 33 },
+        { name: "Frank Smith", company: "ABC1 Ltd", age: 34 },
 
-        { name: "Frank2 Smith", groupMarker: true, className: "GroupHeader" },
-        { name: "Frank1", company: "ABC1 Ltd", age: 31 },
-        { name: "Frank2", company: "ABC2 Ltd", age: 32 },
-        { name: "Frank3", company: "ABC3 Ltd", age: 33 },
-        { name: "Frank4", company: "ABC4 Ltd", age: 34 },
+        { name: "Frank 2 Smith", company: "ABC1 Ltd", age: 31 },
+        { name: "Frank 2 Smith", company: "ABC1 Ltd", age: 32 },
+        { name: "Frank 2 Smith", company: "ABC1 Ltd", age: 33 },
+        { name: "Frank 2 Smith", company: "ABC1 Ltd", age: 34 },
 
-        { name: "Frank2 Smith", groupMarker: true, className: "GroupHeader" },
-        { name: "Frank1", company: "ABC1 Ltd", age: 31 },
-        { name: "Frank2", company: "ABC2 Ltd", age: 32 },
-        { name: "Frank3", company: "ABC3 Ltd", age: 33 },
-        { name: "Frank4", company: "ABC4 Ltd", age: 34 },
-
-        { name: "Frank2 Smith", groupMarker: true, className: "GroupHeader" },
-        { name: "Frank1", company: "ABC1 Ltd", age: 31 },
-        { name: "Frank2", company: "ABC2 Ltd", age: 32 },
-        { name: "Frank3", company: "ABC3 Ltd", age: 33 },
-        { name: "Frank4", company: "ABC4 Ltd", age: 34 },
-
-        { name: "Frank2 Smith", groupMarker: true, className: "GroupHeader" },
-        { name: "Frank1", company: "ABC1 Ltd", age: 31 },
-        { name: "Frank2", company: "ABC2 Ltd", age: 32 },
-        { name: "Frank3", company: "ABC3 Ltd", age: 33 },
-        { name: "Frank4", company: "ABC4 Ltd", age: 34 },
-
-        { name: "Frank2 Smith", groupMarker: true, className: "GroupHeader" },
-        { name: "Frank1", company: "ABC1 Ltd", age: 31 },
-        { name: "Frank2", company: "ABC2 Ltd", age: 32 },
-        { name: "Frank3", company: "ABC3 Ltd", age: 33 },
-        { name: "Frank4", company: "ABC4 Ltd", age: 34 },
-
-        { name: "Frank2 Smith", groupMarker: true, className: "GroupHeader" },
-        { name: "Frank1", company: "ABC1 Ltd", age: 31},
-        { name: "Frank2", company: "ABC2 Ltd", age: 32 },
-        { name: "Frank3", company: "ABC3 Ltd", age: 33 },
-        { name: "Frank4", company: "ABC4 Ltd", age: 34 }
+        { name: "Frank 3 Smith", company: "ABC2 Ltd", age: 31 },
+        { name: "Frank 3 Smith", company: "ABC2 Ltd", age: 32 },
+        { name: "Frank 3 Smith", company: "ABC2 Ltd", age: 33 },
+        { name: "Frank 3 Smith", company: "ABC2 Ltd", age: 34 },
       ]
     };
 
     this.reportLayout = [
+      /*
       {
         type: "pageHeader",
         className: "pageHeader",
         rowHeight: 1,
         columns: [{ header: "Test", text: "{0}", variables: ["title"] }]
+      },
+      */
+      {
+        className: "pageHeader",
+        rowHeight: 2,
+        columns: [
+          { text: "hello {0}", variables: ["tenantName"] },
+          { text: "", className:"logo" }
+        ]
       },
       {
         title: { text: "{0}", height:2, className:"tableTitle", variables: ["userTitle"]  },
@@ -98,7 +84,7 @@ export class AppComponent implements OnInit {
             text: "Page {0} of {1}",
             variables: ["pageNumber", "pageCount"]
           },
-          { header: null, text: "Report generated {0}", variables: ["date"] }
+          { header: null, text: "Report generated {0}", variables: ["date"], className:"right" }
         ]
       }
     ];
@@ -141,7 +127,6 @@ export class AppComponent implements OnInit {
 
     if (report.pageHeader) currentPage = [report.pageHeader];
     currentPageHeightRemaining = maxPageHeight;
-    let currentTable: any = {};
 
     for (let section of report.sections) {
       let rowsLeft = section.rows.length;
@@ -149,17 +134,17 @@ export class AppComponent implements OnInit {
       let loopCount = 0;
       if (section.rows && section.rows.length) {
         while (rowsLeft) {
+          let currentTable: any = {};
+
           loopCount++;
           if (loopCount > 100) break;
 
-          currentTable.rowHeight = section.rowHeight;
+          currentTable = section;
           if (section.title) {
-            currentTable.title = section.title;
             currentTable.title.text = this.bindDataIntoCellText(currentTable.title.text, currentTable.title.variables);
             currentPageHeightRemaining -= section.title.height;
           }
           if (section.head) {
-            currentTable.head = section.head;
             currentPageHeightRemaining -= section.rowHeight;
           }
           let rowsAvailable = Math.floor(
@@ -174,8 +159,8 @@ export class AppComponent implements OnInit {
           rowsLeft -= currentTable.rows.length;
           rowsUsed += currentTable.rows.length;
 
+          currentPage.push(JSON.parse(JSON.stringify(currentTable)));
           if (rowsLeft) {
-            currentPage.push(currentTable);
             if (report.pageFooter) currentPage.push(report.pageFooter);
             pagedReport.push(JSON.parse(JSON.stringify(currentPage)));
 
@@ -188,7 +173,6 @@ export class AppComponent implements OnInit {
     }
 
     // push last page
-    currentPage.push(currentTable);
     if (report.pageFooter) currentPage.push(report.pageFooter);
     pagedReport.push(currentPage);
 

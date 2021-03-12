@@ -9,6 +9,10 @@
     padding:.25cm;
   }
 
+  .right{
+    text-align: right;
+  }
+
   table {
     width: 100%;
     border: solid 0px red;
@@ -67,9 +71,8 @@
               [class]="cell.className"
               [attr.colspan]="cell.colspan"
               *ngFor="let cell of row"
-            >
-              {{cell.text}}
-            </td>
+              [innerHTML]="cell.text"
+            ></td>
           </tr>
         </table>
       </ng-container>
