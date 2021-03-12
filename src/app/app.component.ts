@@ -103,8 +103,30 @@ export class AppComponent implements OnInit {
 
     let report = this.bindReport();
     this.pagedReport = this.pageReport(report);
-    //console.log(JSON.stringify(this.pageReport, null, "  "));
+    this.replaceStaticVariables(this.pagedReport);
     console.log(this.pagedReport);
+  }
+
+  private replaceStaticVariables(pagedReport){
+    if(!pagedReport || !pagedReport.length) return;
+    let pageCount = pagedReport.length;
+    let pageNumber = 0;
+    for(let page of pagedReport){
+      if(!page.length) continue;
+      pageNumber++;
+      for(let table of page){
+        if(!table.rows) continue;
+        for(let row of table.rows){
+          if(!row.length) continue;
+          for(let cell of row){
+            if(cell.hasStaticVariables){
+              cell.text = this.replace(cell.text, '{pageCount}', pageCount);
+              cell.text = this.replace(cell.text, '{pageNumber}', pageNumber);
+            }
+          }
+        }
+      }
+    }
   }
 
   private pageReport(report) {
@@ -286,9 +308,14 @@ export class AppComponent implements OnInit {
   private replaceAll(text, values) {
     for (let i = 0; i < values.length; i++) {
       let search = "{" + i + "}";
-      while (text.indexOf(search) !== -1) {
-        text = text.replace(search, values[i]);
-      }
+      text = this.replace(text, search, values[i]);
+    }
+    return text;
+  }
+
+  private replace(text, search, value){
+    while (text.indexOf(search) !== -1) {
+      text = text.replace(search, value);
     }
     return text;
   }
