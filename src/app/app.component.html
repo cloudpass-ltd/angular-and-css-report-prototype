@@ -51,24 +51,28 @@
 
   <page size="A4" *ngFor="let page of pagedReport">
     <div style="position: relative; height:100%;">
-      <table cellspacing="0" [class]="table.className" *ngFor="let table of page">
-        <tr *ngIf="table.head" [style.height]="table.rowHeight + 'cm'">
-          <th *ngFor="let cell of table.head">
-            {{cell}}
-          </th>
-        </tr>
+      <ng-container *ngFor="let table of page">
+        <div *ngIf="table.title" [style.height]="table.title.height + 'cm'" [class]="table.title.className">
+          {{table.title.text}}
+        </div>
+        <table cellspacing="0" [class]="table.className">
+          <tr *ngIf="table.head" [style.height]="table.rowHeight + 'cm'">
+            <th *ngFor="let cell of table.head">
+              {{cell}}
+            </th>
+          </tr>
   
-        <tr></tr>
-        <tr *ngFor="let row of table.rows" [style.height]="table.rowHeight + 'cm'">
-          <td
-            [class]="cell.className"
-            [attr.colspan]="cell.colspan"
-            *ngFor="let cell of row"
-          >
-            {{cell.text}}
-          </td>
-        </tr>
-      </table>
+          <tr *ngFor="let row of table.rows" [style.height]="table.rowHeight + 'cm'">
+            <td
+              [class]="cell.className"
+              [attr.colspan]="cell.colspan"
+              *ngFor="let cell of row"
+            >
+              {{cell.text}}
+            </td>
+          </tr>
+        </table>
+      </ng-container>
     </div>
   </page>
 

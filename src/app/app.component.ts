@@ -22,6 +22,7 @@ export class AppComponent implements OnInit {
     this.reportData = {
       variables: {
         title: "Test Report",
+        userTitle: "Users 2",
         date: new Date().toLocaleDateString()
       },
       dataSet1: [
@@ -62,7 +63,7 @@ export class AppComponent implements OnInit {
         { name: "Frank4", company: "ABC4 Ltd", age: 34 },
 
         { name: "Frank2 Smith", groupMarker: true, className: "GroupHeader" },
-        { name: "Frank1", company: "ABC1 Ltd", age: 31 },
+        { name: "Frank1", company: "ABC1 Ltd", age: 31},
         { name: "Frank2", company: "ABC2 Ltd", age: 32 },
         { name: "Frank3", company: "ABC3 Ltd", age: 33 },
         { name: "Frank4", company: "ABC4 Ltd", age: 34 }
@@ -77,8 +78,9 @@ export class AppComponent implements OnInit {
         columns: [{ header: "Test", text: "{0}", variables: ["title"] }]
       },
       {
+        title: { text: "{0}", height:2, className:"tableTitle", variables: ["userTitle"]  },
+        noData: { text: "No Data", height:10, className:"noData" },
         rowHeight: 1,
-        noDataHeight: 10,
         dataSet: "dataSet1",
         columns: [
           { header: "Name", dataSetKey: "name", className: "Name" },
@@ -134,8 +136,8 @@ export class AppComponent implements OnInit {
     let currentPage = [];
     let currentPageHeightRemaining = 0;
     let maxPageHeight = 29;
-    if (report.pageHeader) maxPageHeight -= report.pageHeader.height;
-    if (report.pageFooter) maxPageHeight -= report.pageFooter.height;
+    if (report.pageHeader) maxPageHeight -= report.pageHeader.staticHeight;
+    if (report.pageFooter) maxPageHeight -= report.pageFooter.staticHeight;
 
     if (report.pageHeader) currentPage = [report.pageHeader];
     currentPageHeightRemaining = maxPageHeight;
@@ -151,6 +153,11 @@ export class AppComponent implements OnInit {
           if (loopCount > 100) break;
 
           currentTable.rowHeight = section.rowHeight;
+          if (section.title) {
+            currentTable.title = section.title;
+            currentTable.title.text = this.bindDataIntoCellText(currentTable.title.text, currentTable.title.variables);
+            currentPageHeightRemaining -= section.title.height;
+          }
           if (section.head) {
             currentTable.head = section.head;
             currentPageHeightRemaining -= section.rowHeight;
@@ -208,8 +215,10 @@ export class AppComponent implements OnInit {
 
   private generateTable(section) {
     let table = {
+      title: section.title,
+      noData: section.noData,
       className: section.className,
-      height: 0,
+      staticHeight: 0,
       rowHeight: section.rowHeight,
       head: [],
       rows: []
@@ -236,16 +245,16 @@ export class AppComponent implements OnInit {
     }
 
     if (showHeader) {
-      table.height = section.rowHeight;
+      table.staticHeight = section.rowHeight;
     } else {
-      table.height = 0;
+      table.staticHeight = 0;
       delete table.head;
     }
 
     if (table.rows.length) {
-      table.height += section.rowHeight * table.rows.length;
-    } else {
-      table.height += section.noDataHeight;
+      table.staticHeight += section.rowHeight * table.rows.length;
+    } else if(table.noData){
+      table.staticHeight += table.noData.height;
     }
 
     return table;
@@ -306,6 +315,7 @@ export class AppComponent implements OnInit {
   }
 
   private replaceAll(text, values) {
+    if(!values || !values.length) return text;
     for (let i = 0; i < values.length; i++) {
       let search = "{" + i + "}";
       text = this.replace(text, search, values[i]);
